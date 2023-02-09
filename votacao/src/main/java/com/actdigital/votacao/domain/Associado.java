@@ -3,9 +3,13 @@ package com.actdigital.votacao.domain;
 import java.util.UUID;
 
 import br.com.caelum.stella.validation.CPFValidator;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Associado {
-
+	
+	@Id
 	private UUID Id;
 	private String cpf;
 	private String nome;

@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: assembleiadb
+    environment:
+      POSTGRES_DB: ""
+      POSTGRES_USER: ""
+      POSTGRES_PASSWORD: ""
+      ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ""
+      PGADMIN_DEFAULT_PASSWORD: ""
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      RABBITMQ_DEFAULT_USER: 
+      RABBITMQ_DEFAULT_PASS: 
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  postgresql_data:

@@ -1,14 +1,17 @@
-package com.actdigital.votacao.services;
+package com.actdigital.votacao.services.impl;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.actdigital.votacao.data.IAssembleiaRepository;
 import com.actdigital.votacao.domain.Assembleia;
 import com.actdigital.votacao.domain.Pauta;
+import com.actdigital.votacao.services.IAssembleiaService;
 
+@Service
 public class AssembleiaServiceImpl implements IAssembleiaService {
 
 	@Autowired

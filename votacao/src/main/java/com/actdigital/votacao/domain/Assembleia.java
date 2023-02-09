@@ -6,12 +6,22 @@ import java.util.UUID;
 
 import com.actdigital.votacao.utils.Validacoes;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+
+@Entity
 public class Assembleia {
 
+	@Id
 	private UUID id;
 	private String titulo;
 	private String descricao;
 	private Status status;
+	
+	@OneToMany
+	@JoinColumn(name  = "pauta_id")
 	private List<Pauta> pautas;
 
 	public Assembleia(String titulo, String descricao) throws Exception {

@@ -4,12 +4,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+
+@Entity
 public class Pauta {
 
+	@Id
 	private UUID id;
 	private String titulo;
 	private String descricao;
 	private Status status;
+	@ManyToMany
 	private List<Associado> associadosParticipante;
 	private long totalVotoSim;
 	private long totalVotoNao;
@@ -19,7 +26,7 @@ public class Pauta {
 		this.id = UUID.randomUUID();
 		this.titulo = titulo;
 		this.descricao = descricao;
-		this.status = Status.ATIVO;
+		this.status = Status.INATIVO;
 		this.totalVotoSim = 0;
 		this.totalVotoNao = 0;
 		this.criadaEm = LocalDateTime.now();
@@ -61,7 +68,7 @@ public class Pauta {
 		if (associadosParticipante.contains(associado))
 			throw new Exception("associado já votou nesta pauta");
 
-		if (voto.equals(Voto.SIM)) {
+		if (voto.getVoto().equals("SIM")) {
 			totalVotoSim += 1;
 		} else {
 			totalVotoNao += 1;
