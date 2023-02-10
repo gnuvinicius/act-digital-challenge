@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.actdigital.votacao.utils.Validacoes;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -19,10 +20,13 @@ public class Assembleia {
 	private String titulo;
 	private String descricao;
 	private Status status;
-	
-	@OneToMany
-	@JoinColumn(name  = "pauta_id")
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "assembleia_id")
 	private List<Pauta> pautas;
+
+	public Assembleia() {
+	}
 
 	public Assembleia(String titulo, String descricao) throws Exception {
 		this.id = UUID.randomUUID();

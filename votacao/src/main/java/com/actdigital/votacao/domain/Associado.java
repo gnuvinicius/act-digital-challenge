@@ -8,31 +8,28 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Associado {
-	
-	@Id
-	private UUID Id;
-	private String cpf;
-	private String nome;
 
-	public Associado(String cpf, String nome) {
-		Id = UUID.randomUUID();
+	@Id
+	private UUID id;
+	private String cpf;
+
+	public Associado() {
+	}
+
+	public Associado(String cpf) {
+		id = UUID.randomUUID();
 		this.cpf = cpf;
-		this.nome = nome;
 	}
 
 	public UUID getId() {
-		return Id;
+		return id;
 	}
 
 	public String getCpf() {
 		return cpf;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public boolean isCPF() {
+	public static boolean isCPF(String cpf) {
 		var validator = new CPFValidator();
 		try {
 			validator.assertValid(cpf);

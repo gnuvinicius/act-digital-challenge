@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.actdigital.votacao.domain.Voto;
@@ -24,7 +25,7 @@ public class VotacaoController {
 	@Autowired
 	private IPautaService _pautaService;
 
-	@GetMapping
+	@GetMapping(value = "/carrega-assembleias")
 	public ResponseEntity<?> carregaListaAssembleias() {
 		var result = _assembleiaService.carregaListaAssembleias();
 		return ResponseEntity.ok(result);
@@ -40,14 +41,15 @@ public class VotacaoController {
 	}
 
 	@PostMapping(value = "/nova-pauta")
-	public ResponseEntity<?> cadastraNovaPauta() throws Exception {
-		_assembleiaService.cadastraNovaPauta(null, null, null);
+	public ResponseEntity<?> cadastraNovaPauta(@RequestBody PautaRequestDto request) throws Exception {
+		_assembleiaService.cadastraNovaPauta(request.assembleiaId, request.titulo, request.descricao);
 		return ResponseEntity.ok(null);
 	}
 
 	@GetMapping(value = "/abre-sessao")
-	public ResponseEntity<?> abreSessaoVotacao() throws Exception {
-		_pautaService.abreSessaoVotacao(null);
+	public ResponseEntity<?> abreSessaoVotacao(@RequestParam(value = "pauta-id", required = true) String pautaId,
+			@RequestParam(value = "duracao", required = false) Integer segundos) throws Exception {
+		_pautaService.alteraStatusDaSessaoDeVotacao(pautaId, segundos);
 		return ResponseEntity.ok(null);
 	}
 

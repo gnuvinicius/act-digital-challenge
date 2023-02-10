@@ -17,13 +17,6 @@ public interface IAssembleiaRepository extends JpaRepository<Assembleia, String>
 	@Query("SELECT a FROM Assembleia a")
 	List<Assembleia> carregaListAssembleiasAtivas();
 	
-	@Query("SELECT a FROM Assembleia a")
+	@Query("SELECT a FROM Assembleia a where a.id = :assembleiaId")
 	Optional<Assembleia> buscaAssembleiaPorId(UUID assembleiaId);
-	
-	@Query("SELECT a FROM Assembleia a")
-	void cadastra(Assembleia assembleia);
-	
-	@Query("SELECT a FROM Assembleia a")
-	void atualiza(Assembleia assembleia);
-
 }

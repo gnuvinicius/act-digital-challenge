@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
@@ -16,11 +18,15 @@ public class Pauta {
 	private String titulo;
 	private String descricao;
 	private Status status;
-	@ManyToMany
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Associado> associadosParticipante;
 	private long totalVotoSim;
 	private long totalVotoNao;
 	private LocalDateTime criadaEm;
+	
+	public Pauta() {
+	}
 
 	public Pauta(String titulo, String descricao) {
 		this.id = UUID.randomUUID();
@@ -64,8 +70,8 @@ public class Pauta {
 		return criadaEm;
 	}
 
-	public void registrarVoto(Voto voto, Associado associado) throws Exception {
-		if (associadosParticipante.contains(associado))
+	public void registrarVoto(Voto voto, String cpfAssociado) throws Exception {
+		if (associadosParticipante.stream().anyMatch(a -> a.getCpf().equals(cpfAssociado)))
 			throw new Exception("associado já votou nesta pauta");
 
 		if (voto.getVoto().equals("SIM")) {
@@ -74,7 +80,7 @@ public class Pauta {
 			totalVotoNao += 1;
 		}
 
-		associadosParticipante.add(associado);
+		associadosParticipante.add(new Associado(cpfAssociado));
 	}
 
 	public boolean sessaoEstaAberta() {
@@ -86,5 +92,8 @@ public class Pauta {
 	public void abreSessao() {
 		status = Status.ATIVO;
 	}
-
+	
+	public void fechaSessao() {
+		status = Status.INATIVO;
+	}
 }

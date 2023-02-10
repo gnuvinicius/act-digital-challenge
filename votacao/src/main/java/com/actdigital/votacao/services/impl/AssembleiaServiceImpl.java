@@ -3,6 +3,8 @@ package com.actdigital.votacao.services.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,10 @@ import com.actdigital.votacao.services.IAssembleiaService;
 @Service
 public class AssembleiaServiceImpl implements IAssembleiaService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AssembleiaServiceImpl.class);
+
+	private static String ASSEMBLEIA_NOT_FOUND = "assembleia não encontrada pelo Id %s";
+
 	@Autowired
 	private IAssembleiaRepository _repository;
 
@@ -24,20 +30,26 @@ public class AssembleiaServiceImpl implements IAssembleiaService {
 
 	@Override
 	public void cadastraNovaAssembleia(String titulo, String descricao) throws Exception {
-		_repository.cadastra(new Assembleia(titulo, descricao));
+		try {
+			var entity = new Assembleia(titulo, descricao);
+			_repository.save(entity);
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	public void cadastraNovaPauta(String assembleiaId, String titulo, String descricao) throws Exception {
 
 		Assembleia assembleia = _repository.buscaAssembleiaPorId(UUID.fromString(assembleiaId))
-				.orElseThrow(() -> new Exception());
+				.orElseThrow(() -> {
+					LOGGER.error(String.format(ASSEMBLEIA_NOT_FOUND, assembleiaId));
+					return new Exception(String.format(ASSEMBLEIA_NOT_FOUND, assembleiaId));
+				});
 
-		var novaPauta = new Pauta(titulo, descricao);
+		assembleia.adicionarPauta(new Pauta(titulo, descricao));
 
-		assembleia.adicionarPauta(novaPauta);
-
-		_repository.atualiza(assembleia);
+		_repository.save(assembleia);
 	}
 
 	@Override
@@ -46,6 +58,6 @@ public class AssembleiaServiceImpl implements IAssembleiaService {
 				.orElseThrow(() -> new Exception());
 
 		assembleia.encerra();
-		_repository.atualiza(assembleia);
+		_repository.save(assembleia);
 	}
 }

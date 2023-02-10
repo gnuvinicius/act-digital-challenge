@@ -7,7 +7,6 @@ public class Voto {
 	private String voto;
 
 	public Voto() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Voto(String pautaId, String cpfAssociado, String voto) {
