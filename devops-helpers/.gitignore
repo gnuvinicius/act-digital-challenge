@@ -1,5 +1,4 @@
 .vagrant
 *.log
 *docker-compose.yml
-set-variable-environment-windows.bat
 *Dockerfile

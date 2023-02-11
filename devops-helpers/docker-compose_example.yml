@@ -1,14 +1,5 @@
 version: "3.8"
 services:
-  api:
-    build: ./api
-    environment:
-      POSTGRES_DATABASE: "assembleiadb-dev"
-      POSTGRES_USER: "actdigitalbuser"
-      POSTGRES_PASSWD: ""
-      QUEUE_PASSWD: ""
-    ports:
-      - "8080:8080"
   db:
     image: postgres
     restart: always
@@ -43,6 +34,19 @@ services:
       - type: bind
         source: ./rabbitmq-defs.json
         target: /etc/rabbitmq/rabbitmq-defs.json
+  api:
+    build: ./api
+    environment:
+      POSTGRES_DATABASE: "assembleiadb-dev"
+      POSTGRES_USER: "actdigitalbuser"
+      POSTGRES_PASSWD: ""
+      QUEUE_PASSWD: ""
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - rabbitmq
+
 
 volumes:
   postgresql_data:
