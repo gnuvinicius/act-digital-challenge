@@ -1,0 +1,32 @@
+{
+  "exchanges": [
+    {
+      "name": "actdigital_exchange",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "actdigital_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "actdigital_queue",
+      "vhost": "/",
+      "destination": "actdigital_queue",
+      "destination_type": "queue",
+      "routing_key": "actdigital_routing_key",
+      "arguments": {}
+    }
+  ]
+}

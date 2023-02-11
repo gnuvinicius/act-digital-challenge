@@ -1,14 +1,21 @@
 version: "3.8"
 services:
   api:
-    build: ./api 
+    build: ./api
+    environment:
+      POSTGRES_DATABASE: "assembleiadb-dev"
+      POSTGRES_USER: "actdigitalbuser"
+      POSTGRES_PASSWD: ""
+      QUEUE_PASSWD: ""
+    ports:
+      - "8080:8080"
   db:
     image: postgres
     restart: always
     container_name: assembleiadb
     environment:
-      POSTGRES_DB: ""
-      POSTGRES_USER: ""
+      POSTGRES_DB: "assembleiadb-dev"
+      POSTGRES_USER: "actdigitalbuser"
       POSTGRES_PASSWORD: ""
       ALLOW_EMPTY_PASSWORD: "no"
     ports:
@@ -18,7 +25,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: ""
+      PGADMIN_DEFAULT_EMAIL: "root@actdigital.dev"
       PGADMIN_DEFAULT_PASSWORD: ""
     ports:
       - "16543:80"
@@ -27,11 +34,15 @@ services:
   rabbitmq:
     image: rabbitmq:management
     environment:
-      RABBITMQ_DEFAULT_USER: 
+      RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: 
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - type: bind
+        source: ./rabbitmq-defs.json
+        target: /etc/rabbitmq/rabbitmq-defs.json
 
 volumes:
   postgresql_data:
